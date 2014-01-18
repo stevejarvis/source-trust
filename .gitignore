@@ -1,0 +1,3 @@
+*.marshal
+*.pyc
+__pycache__*
