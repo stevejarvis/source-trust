@@ -56,6 +56,8 @@ the login_app. There is no malicious code in the source, yet the bug persists.
 Notes and (Unintentional) Bugs
 ----------------------------
 
+Developed with Python3, probably won't work with Python2.
+
 There's room for improvement, but I believe this suffices to be an interesting
 example.
 
