@@ -53,9 +53,10 @@ no presence of the malicious code in the source.
     runner.py login_app.marshal backdoor    # accepted (no, see notes)
 
 * Disable all the shady code, re-compile the compiler and use it to re-compile
-the login_app. There is no malicious code in the source, yet the bug persists.
+the login_app.
 
-    ```bash
+There is no malicious code in the source, yet the bug persists.
+
     runner.py compiler.marshal compiler.py
     runner.py compiler.marshal login_app.py
     runner.py login_app.marshal please    # accepted
