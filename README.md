@@ -18,18 +18,17 @@ Steps
 Initially, login_app.py works as expected. "please" is accepted and "backdoor"
 denied.
 
-    ```bash
     compiler.py compiler.py
     runner.py compiler.marshal login_app.py
     runner.py login_app.marshal please    # accepted
     runner.py login_app.marshal backdoor    # denied
 
 * Enable the step 2 code and re-compile the compiler (with the compiler).
+
 At this point, there's is obvious malicious code in the compiler and the
 malicious user can be granted access to the application. "backdoor" is
 accepted as a password.
 
-    ```bash
     runner.py compiler.marshal compiler.py
     runner.py compiler.marshal login_app.py
     runner.py login_app.marshal please    # accepted
@@ -38,10 +37,10 @@ accepted as a password.
 Note: This step is not actually necessary to get the final effect.
 
 * Disable the step 2 code and enable step 3 code. Recompile the compiler.
+
 The step 3 substitution is targeted at the compiler, to introduce the
 bug from step 2 and re-insert itself during the compiler's compilation.
 
-    ```bash
     runner.py compiler.marshal compiler.py
 
 Now the bug is in the compiler binary (compiler.marshal). Every time that
@@ -49,7 +48,6 @@ binary is used to compile compiler.py, it will reintroduce the bugs into the
 compiler and ultimately into the login application, even after the there is
 no presence of the malicious code in the source.
 
-    ```bash
     runner.py compiler.marshal login_app.py
     runner.py login_app.marshal please    # accepted
     runner.py login_app.marshal backdoor    # accepted (no, see notes)
